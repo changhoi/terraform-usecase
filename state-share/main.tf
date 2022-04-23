@@ -3,29 +3,30 @@ provider "aws" {
   region  = var.region
 }
 
-terraform {
+# terraform {
 
-  backend "s3" {
-    profile = "terraform"
-    bucket  = "terraform-state-share-example"
-    key     = "global/s3/terraform.tfstate"
-    region  = "ap-northeast-2"
+#   backend "s3" {
+#     profile = "terraform"
+#     bucket  = "terraform-state-share-example"
+#     key     = "global/s3/terraform.tfstate"
+#     region  = "ap-northeast-2"
 
-    dynamodb_table = "terraform-state-share-locks"
-    encrypt        = true
-  }
-}
+#     dynamodb_table = "terraform-state-share-locks"
+#     encrypt        = true
+#   }
+# }
 
 resource "aws_s3_bucket" "terraform_state" {
-  bucket = var.bucket_name # Bucket 이름
+  bucket        = var.bucket_name # Bucket 이름
+  force_destroy = true
 
-  lifecycle {
-    prevent_destroy = true # 리소스가 삭제되는 것을 방지함(Destroy가 실행 되면 에러 발생 후 종료)
-  }
+  # lifecycle {
+  #   prevent_destroy = true # 리소스가 삭제되는 것을 방지함(Destroy가 실행 되면 에러 발생 후 종료)
+  # }
 
-  versioning {
-    enabled = true # S3의 버전 관리 기능
-  }
+  # versioning {
+  #   enabled = true # S3의 버전 관리 기능
+  # }
 
   server_side_encryption_configuration {
     rule {
